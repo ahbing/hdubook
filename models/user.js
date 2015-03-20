@@ -12,13 +12,13 @@ function User(user){
 module.exports = User;
 
 User.prototype.save = function(callback){
-	var data = new Data();
+	var date = new Date();
 	//存儲各種時間格式  方便日後擴展
 	var time = {
-		data : data,
-		year : data.getFullYear(),
-		month : data.getFullYear() + '-' +(data.getMonth()+1),
-		day : data.getFullYear() + '-' + (data.getMonth()+1) + '-' +data.getDay(),
+		date : date,
+		year : date.getFullYear(),
+		month : date.getFullYear() + '-' +(date.getMonth()+1),
+		day : date.getFullYear() + '-' + (date.getMonth()+1) + '-' +date.getDay(),
 		minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
       date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
 	};

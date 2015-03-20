@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 
 var flash = require('connect-flash');
 var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
 
 var routes = require('./routes/index');
 var settings = require('./settings');
@@ -32,13 +31,13 @@ app.use(flash());
 // led to load c++ bson extension, using pure JS version
 app.use(session({
   secret: settings.cookieSecret,
-  key: settings.db,//cookie name
+  //key: settings.db,//cookie name
   cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
-  store: new MongoStore({
-    db: settings.db,
-    host: settings.host,
-    port: settings.port
-  })
+  // store: new MongoStore({
+  //   db: settings.db,
+  //   host: settings.host,
+  //   port: settings.port
+  // })
 }));
 routes(app);
 

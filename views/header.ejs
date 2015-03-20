@@ -5,3 +5,25 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+  <% if(success){ %>
+		<div> <%= success %> </div>
+	<% }else{ %>
+		<div> <%= error %> </div>
+	<% } %>
+
+  <% if(user){ %>
+    <span><a href="/logout">登出</a></span>
+    <span><a href="/upload">上傳</a></span>
+    <!-- 如果是自己的name顯示個人中心可以編輯 -->
+    <span><a href="/user:user">個人中心</a></span>
+
+  <% }else{ %>
+    <span><a href="/reg">註冊</a></span><br/>
+    <span><a href="/login">登錄</a></span>
+  <% } %>
+  <br/>
+    <span>
+      <form action="/search" method="post">
+        <input type="search" name="search">
+      </form>
+    </span>
