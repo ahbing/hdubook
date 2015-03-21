@@ -171,6 +171,28 @@ Book.update = function(bookId,book,callback){
 	});
 };
 
+Book.delete = function(bookid,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('books',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.remove({_id: new ObjectID(bookid)},1,function(err){
+				mongodb.close();
+				if(err){
+					callback(err);
+				}
+				callback(null);
+			});
+		});
+	});
+};
+
 
 
 

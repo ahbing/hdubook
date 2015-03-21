@@ -272,7 +272,21 @@ module.exports = function(app){
 			}
 			res.redirect(url);
 		});
-	})
+	});
+
+	app.get('/user/delete/:bookid',checkLogin);
+	app.get('/user/delete/:bookid',function(req,res){
+		var bookid = req.params.bookid;
+		Book.delete(bookid,function(err){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('back');
+			}
+			res.redirect('back');
+		});
+	});
+
+
 
 
 	function checkLogin(req,res,next){
