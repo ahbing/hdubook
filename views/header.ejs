@@ -15,7 +15,7 @@
     <span><a href="/logout">登出</a></span>
     <span><a href="/upload">上傳</a></span>
     <!-- 如果是自己的name顯示個人中心可以編輯 -->
-    <span><a href="/user:user">個人中心</a></span>
+    <span><a href="/user/<%= user.name %>">個人中心</a></span>
 
   <% }else{ %>
     <span><a href="/reg">註冊</a></span><br/>
@@ -23,7 +23,7 @@
   <% } %>
   <br/>
     <span>
-      <form action="/search" method="post">
+      <form action="/search" method="GET">
         <input type="search" name="search">
       </form>
     </span>

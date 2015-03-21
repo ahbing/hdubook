@@ -9,9 +9,10 @@ module.exports = function(app){
 
 	//主頁 顯示 最新上傳的書籍  和一個 input 搜索
 	app.get('/',function(req,res){
-		var page = req.body.p ? req.body.p : 1;
+		var page = req.query.p ? parseInt(req.query.p) : 1;
 		// 返回的參數分別是  book 數組  每頁顯示的書本數  總共的書本數
-		Book.getBooksByBookName(null,page,function(err,books,num,total){
+		//参数 用户名 书名 页数 回调
+		Book.getBooksByBookName(null,null,page,function(err,books,num,total){
 			res.render('index',{
 				title:'主頁',
 				page:page,
@@ -138,7 +139,6 @@ module.exports = function(app){
 				bookprice = req.body.bookprice,
 				usetime = req.body.usetime,
 				usersay = req.body.usersay;
-
 		var newBook = new Book(bookuser,bookname,bookprice,usetime,usersay);
 
 		newBook.save(function(err){
@@ -148,9 +148,89 @@ module.exports = function(app){
 			}
 			req.flash('success','恭喜恭喜，上傳成功了 :-)');
 			res.redirect('/');  //暫時先連到主頁上去
-
 		});
+	});
 
+  app.get('/user/:name',checkLogin);
+  app.get('/user/:name',function(req,res){
+  	var userName = req.params.name;
+  	var curName = req.session.user.name;
+  	if(userName == curName){
+  		//访问 个人主頁
+  		var page = req.query.p ? parseInt(req.query.p) :1;
+  		Book.getBooksByBookName(curName,null,page,function(err,books,num,total){
+  			res.render('person',{
+  				title:'个人中心',
+  				books:books,
+  				user:req.session.user,
+  				page:page,
+					total:total,
+					isFirstPage : (page-1) == 0,
+				  isLastPage : ((page-1)*num+books.length) == total,
+					success : req.flash('success').toString(),
+					error : req.flash('error').toString()
+  			});
+  		});
+  	}else{
+  		var page = req.query.p ? parseInt(req.query.p) :1;
+  		Book.getBooksByBookName(userName,null,page,function(err,books,num,total){
+  			res.render('user',{
+  				title:'个人中心',
+  				userName:userName,
+  				books:books,
+  				user:req.session.user,
+  				page:page,
+					total:total,
+					isFirstPage : (page-1) == 0,
+				  isLastPage : ((page-1)*num+books.length) == total,
+					success : req.flash('success').toString(),
+					error : req.flash('error').toString()
+  			});
+  		});
+  	}
+  });
+
+	app.get('/book/:bookid',checkLogin);
+	app.get('/book/:bookid',function(req,res){
+		var bookid = req.params.bookid;
+		console.bookid;
+		Book.getBookById(bookid,function(err,book){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('back');
+			}
+			console.log(book);
+			res.render('book',{
+				title:'書本詳情',
+				book:book,
+				user:req.session.user,
+				success : req.flash('success').toString(),
+				error : req.flash('error').toString()
+			});
+		});
+	});
+
+	app.get('/search',function(req,res){
+		var bookname = req.query.search;
+		var page = req.query.p? parseInt(req.query.p):1;
+		Book.getBooksByBookName(null,bookname,page,function(err,books,num,total){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('/');
+			}
+			console.log(books.length);
+			res.render('search',{
+				title:'搜索結果',
+				books:books,
+				user:req.session.user,
+				page:page,
+				total:total,
+				isFirstPage : (page-1) == 0,
+			  isLastPage : ((page-1)*num+books.length) == total,
+				success : req.flash('success').toString(),
+				error : req.flash('error').toString()
+			});
+		});
 	});
 
 

@@ -2,22 +2,22 @@
   <%= title%>
   <% books.forEach(function(book,index){ %>
   <div>
-  書名:<%= book.bookname %><br/>
-  賣家:<%= book.bookuser.name %><br/>
-  價格:<%= book.bookprice %><br/>
-  賣家曾經使用的時間:<%= book.usetime %><br/>
-  賣家對你的留言:<%= book.usersay %>
-
+  書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
+  賣家:<a href="/user/<%= book.bookuser.name %>"><%= book.bookuser.name %></a><br/>
+  價格:<%= book.bookprice %><br/><br/>
+  賣家曾經使用的時間:<br/><%= book.usetime %><br/><br/>
+  賣家對你的留言:<br/><%= book.usersay %>
   </div>
   <br />
-<div>
-  <% if (!isFirstPage) { %>
-    <span class="prepage"><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
-  <% } %>
 
-  <% if (!isLastPage) { %>
-    <span class="nextpage"><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
-  <% } %>
-</div>
   <% }); %>
+
+  <div>
+    <% if (!isFirstPage) { %>
+      <span class="prepage"><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
+    <% } %>
+    <% if (!isLastPage) { %>
+      <span class="nextpage"><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
+    <% } %>
+  </div>
 <%- include footer %>

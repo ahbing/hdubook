@@ -1,7 +1,9 @@
 var mongodb = require('./db');
-
+//  mongodb 的id
+var ObjectID = require('mongodb').ObjectID;
 function Book(bookuser,bookname,bookprice,usetime,usersay){
 	this.bookuser = bookuser;
+	this.bookusername = bookuser.name;  //用戶名字 單獨拿出來
 	this.bookname = bookname;
 	this.bookprice =  bookprice;
 	this.usetime = usetime;
@@ -17,12 +19,13 @@ Book.prototype.save = function(callback){
 		date : date,
 		year : date.getFullYear(),
 		month : date.getFullYear() + '-' +(date.getMonth()+1),
-		day : date.getFullYear() + '-' + (date.getMonth()+1) + '-' +date.getDay(),
+		day : date.getFullYear() + '-' + (date.getMonth()+1) + '-' +date.getDate(),
 		minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
       date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
 	};
 	var book = {
 		bookuser : this.bookuser,
+		bookusername :this.bookusername,
 		bookname : this.bookname,
 		bookprice : this.bookprice,
 		usetime : this.usetime,
@@ -54,7 +57,7 @@ Book.prototype.save = function(callback){
 //書名參數爲空的時候 返回按時間順序排的所有的書
 //如果有書名，就返回按時間排序的該書
 //page 是當前顯示的頁數
-Book.getBooksByBookName = function(bookname,page,callback){
+Book.getBooksByBookName = function(username,bookname,page,callback){
 	var num = 12;  //設置每頁顯示12本書
 	mongodb.open(function(err,db){
 		if(err){
@@ -66,10 +69,18 @@ Book.getBooksByBookName = function(bookname,page,callback){
 				mongodb.close();
 				return callback(err);
 			}
-
 			var query = {};
-			if(bookname){
+
+			if(bookname && !username){
 				query.bookname = bookname;
+			}
+			if(username && !bookname){
+
+				query.bookusername = username;
+			}
+			if( username && bookname){
+				query.bookname = bookname;
+				query.bookusername = username;
 			}
 
 			collection.count(query,function(err,total){
@@ -97,6 +108,27 @@ Book.getBooksByBookName = function(bookname,page,callback){
 	});
 };
 
+Book.getBookById = function(bookId,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('books',function(err,collection){
+			if(err){
+				mongodb.close();
+				callback(err);
+			}
+			collection.findOne({_id:new ObjectID(bookId)},function(err,book){
+				mongodb.close();
+				if(err){
+					callback(err);
+				}
+				callback(null,book);
+			});
+		});
+	});
+};
 
 
 
