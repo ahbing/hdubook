@@ -193,7 +193,6 @@ module.exports = function(app){
 	app.get('/book/:bookid',checkLogin);
 	app.get('/book/:bookid',function(req,res){
 		var bookid = req.params.bookid;
-		console.bookid;
 		Book.getBookById(bookid,function(err,book){
 			if(err){
 				req.flash('error',err);
@@ -233,6 +232,47 @@ module.exports = function(app){
 		});
 	});
 
+
+	app.get('/user/edit/:bookid',checkLogin);
+	app.get('/user/edit/:bookid',function(req,res){
+		var bookid = req.params.bookid;
+		Book.getBookById(bookid,function(err,book){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('/');
+			}
+			res.render('edit',{
+				title:'編輯',
+				book:book,
+				user:req.session.user,
+				success:req.flash('success').toString(),
+				error:req.flash('error').toString()
+			});
+		});
+	});
+
+	app.post('/user/edit/:bookid',checkLogin);
+	app.post('/user/edit/:bookid',function(req,res){
+		var bookid = req.body.bookid;
+		var url = encodeURI('/user/'+req.body.bookusername);
+		var book = {
+			bookuser:req.body.bookuser,
+			bookusername : req.body.bookusername,
+			bookname:req.body.bookname,
+			bookprice:req.body.bookprice,
+			usetime:req.body.usetime,
+			usersay:req.body.usersay
+		}
+		console.log(bookid);
+		console.log(book);
+		Book.update(bookid,book,function(err){
+			if(err){
+				req.flash('error',err);
+				return res.direct('/edit/'+bookid);
+			}
+			res.redirect(url);
+		});
+	})
 
 
 	function checkLogin(req,res,next){

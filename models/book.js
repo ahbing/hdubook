@@ -130,6 +130,47 @@ Book.getBookById = function(bookId,callback){
 	});
 };
 
+//參數book的屬性的對象
+Book.update = function(bookId,book,callback){
+		var date = new Date();
+	//存儲各種時間格式  方便日後擴展
+	var updatetime = {
+		date : date,
+		year : date.getFullYear(),
+		month : date.getFullYear() + '-' +(date.getMonth()+1),
+		day : date.getFullYear() + '-' + (date.getMonth()+1) + '-' +date.getDate(),
+		minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
+      date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+	};
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('books',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.update({_id:new ObjectID(bookId)},{$set:{
+				bookuser:book.bookuser,
+				bookusername:book.bookusername,
+				bookname:book.bookname,
+				bookprice:book.bookprice,
+				usetime:book.usetime,
+				usersay:book.usersay,
+				updatetime:updatetime  //如果沒有這個選項就創建updatetime
+			}},function(err){
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+				callback(null);
+			});
+		});
+	});
+};
+
 
 
 
