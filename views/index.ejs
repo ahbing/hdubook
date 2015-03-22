@@ -1,6 +1,7 @@
 <%- include header %>
   <%= title%>
   <% books.forEach(function(book,index){ %>
+  <% if(book.sold == 0){ %>
   <div>
   書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
   賣家:<a href="/user/<%= book.bookuser.name %>"><%= book.bookuser.name %></a><br/>
@@ -9,7 +10,7 @@
   賣家對你的留言:<br/><%= book.usersay %>
   </div>
   <br />
-
+<% } %>
   <% }); %>
 
   <div>

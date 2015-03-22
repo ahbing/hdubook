@@ -1,15 +1,20 @@
 <%- include header %>
   <%= title%>
+
+ <a href="/sold/<%= userName%>">我賣掉的書</a>
   <% books.forEach(function(book,index){ %>
+<% if(book.sold == 0){ %>
   <div>
   書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
   價格:<%= book.bookprice %><br/><br/>
   我曾經使用的時間:<br/><%= book.usetime %><br/><br/>
   我對浏览者的留言:<br/><%= book.usersay %><br/>
-  <a href="edit/<%= book._id %><%= %>">編輯</a>
-  <a href="#">刪除</a>
+  <a href="edit/<%= book._id %>">編輯</a>
+  <a href="delete/<%= book._id%>">不賣啦</a>
+  <a href="sold/<%= book._id%>">賣掉啦</a>
   </div>
   <br />
+<% } %>
   <% }); %>
 
 

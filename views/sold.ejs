@@ -1,17 +1,19 @@
 <%- include header %>
   <%= title%>
+
   <% books.forEach(function(book,index){ %>
-  <% if(book.sold == 0){ %>
+<% if(book.sold == 1){ %>
   <div>
   書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
-  賣家:<a href="/user/book.bookusername"><%= book.bookusername%></a><br/>
   價格:<%= book.bookprice %><br/><br/>
   我曾經使用的時間:<br/><%= book.usetime %><br/><br/>
   我對浏览者的留言:<br/><%= book.usersay %><br/>
   </div>
   <br />
-  <% } %>
+<% } %>
   <% }); %>
+
+
     <div>
     <% if (!isFirstPage) { %>
       <span><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>

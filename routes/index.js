@@ -161,6 +161,7 @@ module.exports = function(app){
   		Book.getBooksByBookName(curName,null,page,function(err,books,num,total){
   			res.render('person',{
   				title:'个人中心',
+  				userName:userName,
   				books:books,
   				user:req.session.user,
   				page:page,
@@ -217,7 +218,6 @@ module.exports = function(app){
 				req.flash('error',err);
 				return res.redirect('/');
 			}
-			console.log(books.length);
 			res.render('search',{
 				title:'搜索結果',
 				books:books,
@@ -263,8 +263,6 @@ module.exports = function(app){
 			usetime:req.body.usetime,
 			usersay:req.body.usersay
 		}
-		console.log(bookid);
-		console.log(book);
 		Book.update(bookid,book,function(err){
 			if(err){
 				req.flash('error',err);
@@ -277,16 +275,62 @@ module.exports = function(app){
 	app.get('/user/delete/:bookid',checkLogin);
 	app.get('/user/delete/:bookid',function(req,res){
 		var bookid = req.params.bookid;
+
 		Book.delete(bookid,function(err){
 			if(err){
 				req.flash('error',err);
 				return res.redirect('back');
 			}
+			req.flash('success','刪除成功了噢');
+			res.redirect('back');
+		});
+	});
+
+	app.get('/user/sold/:bookid',checkLogin);
+	app.get('/user/sold/:bookid',function(req,res){
+		var bookid = req.params.bookid;
+		Book.sold(bookid,function(err){
+			if(err){
+				req.flash('error',err);
+				res.redirect('back');
+			}
+			req.flash('success','恭喜你賣掉啦自己的書')	;
 			res.redirect('back');
 		});
 	});
 
 
+	//顯示被賣掉的書
+	app.get('/sold/:username',checkLogin);
+	app.get('/sold/:username',function(req,res){
+		var curname = req.session.user.name;
+		var username = req.params.username;
+		console.log(curname);
+		console.log(username);
+		var page = req.query.p ? parseInt(req.query.p) : 1;
+		Book.getBooksByBookName(username,null,page,function(err,books,num,total){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('back');
+			}
+			if(curname == username){
+				res.render('sold',{
+					title:'我已經賣掉的書',
+					books:books,
+					user:req.session.user,
+					page:page,
+					total:total,
+					isFirstPage : (page-1) == 0,
+				  isLastPage : ((page-1)*num+books.length) == total,
+					success : req.flash('success').toString(),
+					error : req.flash('error').toString()
+				});
+			}else{
+				req.flash('error','抱歉你沒有權限訪問');
+				res.redirect('back');
+			}
+		});
+	});
 
 
 	function checkLogin(req,res,next){

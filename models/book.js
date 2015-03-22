@@ -30,7 +30,8 @@ Book.prototype.save = function(callback){
 		bookprice : this.bookprice,
 		usetime : this.usetime,
 		usersay :this.usersay,
-		time:time
+		time:time,
+		sold:0  // 0 表示正在賣
 	};
 
 	mongodb.open(function(err,db){
@@ -186,6 +187,42 @@ Book.delete = function(bookid,callback){
 				mongodb.close();
 				if(err){
 					callback(err);
+				}
+				callback(null);
+			});
+		});
+	});
+};
+
+Book.sold = function(bookid,callback){
+	var date = new Date();
+	var soldtime = {
+		date : date,
+		year : date.getFullYear(),
+		month : date.getFullYear() + '-' +(date.getMonth()+1),
+		day : date.getFullYear() + '-' + (date.getMonth()+1) + '-' +date.getDate(),
+		minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
+      date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+	};
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('books',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.update({_id:new ObjectID(bookid)},{$set:{
+				//將狀態改成被賣掉
+				sold:1,
+				//存儲被賣掉的時間
+				soldtime:soldtime
+			}},function(err){
+				mongodb.close();
+				if(err){
+					return callback(err);
 				}
 				callback(null);
 			});
