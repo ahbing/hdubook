@@ -1,10 +1,12 @@
 <%- include header %>
    <form method="post">
     用戶名稱 : <input type="text" name="name"/><br/>
-    設置密碼 : <input type="password"% name="password"/><br/>
-    重複密碼 : <input type="password"% name="re-password"/><br/>
+    設置密碼 : <input type="password" name="password"/><br/>
+    重複密碼 : <input type="password" name="re-password"/><br/>
     學院系別 : <input type="text" name="faculty"/><br/>
     大學年級 : <input type="text" name="grade"/><br/>
+    <input type="hidden" name="header" value="logo.jpg"><br/>
+    <input type="hidden" name ="motto" value="A year from now you will wish you had started today.">
     <input type="submit" value="註冊"/>
    </form>
 <%- include footer %>

@@ -1,0 +1,7 @@
+ <%  include header%>
+ <form action="/updateheader/<%= user.name%>" method="post" enctype='multipart/form-data'>
+   當前頭像:<img src="/upload/images/<%= user.header%>" alt="當前頭像"><br/>
+    上傳新頭像:<input type="file" name="header"><br/>
+ <input type="submit" value="保存">
+    </form>
+ <%  include footer%>

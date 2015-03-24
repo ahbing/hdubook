@@ -40,7 +40,6 @@ module.exports = function(app){
 	//提交註冊信息
 	app.post('/reg',checkNotLogin);
 	app.post('/reg',function(req,res){
-		console.log(req.body);
 		var name = req.body.name;
 		var password = req.body.password;
 		var re_password = req.body['re-password'];
@@ -55,7 +54,10 @@ module.exports = function(app){
 			name:req.body.name,
 			password:password,  //加密過的密碼
 			grade:req.body.grade,
-			faculty:req.body.faculty
+			faculty:req.body.faculty,
+			// 用戶名加上圖片名確保圖片src唯一
+			header :req.body.header,
+			motto : req.body.motto
 		});
 		// 檢驗用戶名稱是否已經存在
 		User.get(newUser.name,function(err,user){
@@ -134,12 +136,12 @@ module.exports = function(app){
 
 	app.post('/upload',checkLogin);
 	app.post('/upload',function(req,res){
-		var bookuser = req.session.user, // 用戶信息 與書本綁定包括作者名字、專業、年級
-				bookname = req.body.bookname,
+		var bookusername = req.session.user.name, // 用戶信息 與書本綁定包括作者名字、專業、年級
+		    bookname = req.body.bookname,
 				bookprice = req.body.bookprice,
 				usetime = req.body.usetime,
 				usersay = req.body.usersay;
-		var newBook = new Book(bookuser,bookname,bookprice,usetime,usersay);
+		var newBook = new Book(bookusername,bookname,bookprice,usetime,usersay);
 
 		newBook.save(function(err){
 			if(err){
@@ -241,7 +243,7 @@ module.exports = function(app){
 				req.flash('error',err);
 				return res.redirect('/');
 			}
-			res.render('edit',{
+			res.render('editbook',{
 				title:'編輯',
 				book:book,
 				user:req.session.user,
@@ -331,6 +333,166 @@ module.exports = function(app){
 			}
 		});
 	});
+	//  用戶信息修改頁面
+
+	app.get('/edit/:username',checkLogin);
+	app.get('/edit/:username',function(req,res){
+		var username = req.params.username;
+		var curname = req.session.user.name;
+		if(username == curname){
+			User.getUserByName(curname,function(err,user){
+				if(err){
+					req.flash('error',err);
+					return res.redirect('back');
+				}
+				//先將數據庫的的密碼解密  再渲染到 編輯頁面
+				//console.log(user);
+				res.render('edituser',{
+					title:"個人信息修改",
+					username : user.name,
+					userfaculty : user.faculty,
+					usergrade : user.grade,
+					//這裡的user.header 是一個用戶名加文件名的字符串
+					userheader :user.header,
+					usermotto :user.motto,
+					user:req.session.user,
+					success : req.flash('success').toString(),
+					error : req.flash('error').toString()
+				});
+			});
+		}else{
+			req.flash('error',你沒有權限訪問該業麵);
+			res.redirect('back');
+		}
+	});
+	//修改用戶名稱
+	app.post('/edit/:username/:name',checkLogin);
+	app.post('/edit/:username/:name',function(req,res){
+		var username = req.params.username;
+		var newname = req.body.name;
+		var newfaculty = req.body.faculty;
+		var newgrade = req.body.grade;
+		var newheader = req.body.header;
+		var newmotto = req.body.motto;
+		var errurl = encodeURI('/edit/'+username);
+		var url = encodeURI('/edit/'+newname);
+		if(newname){
+			var errurl = encodeURI('/edit/'+username);
+			var url = encodeURI('/edit/'+newname);
+			User.updateName(username,newname,function(err,user){
+				if(err){
+					req.flash('error',err);
+					return res.redirect(errurl);
+				}
+				if(user){
+					//console.log(user);
+					req.flash('error','你修改的用戶名已經存在');
+					return res.redirect(errurl);
+				}
+				req.flash('success','修改成功');
+				//修改當前登錄的人姓名
+				req.session.user.name = newname
+				res.redirect(url);
+			});
+		}else{
+		  var url = encodeURI('/edit/'+username);
+			User.update(username,newfaculty,newgrade,newheader,newmotto,function(err){
+				if(err){
+					req.flash('error',err);
+					return res.redirect(url);
+				}
+				req.flash('success','修改成功');
+				res.redirect(url);
+			});
+		}
+
+	});
+
+//上傳更新圖像
+app.get('/updateheader/:username',checkLogin);
+app.get('/updateheader/:username',function(req,res){
+	res.render('updateheader',{
+		title:'修改頭像',
+		user:req.session.user,
+		success:req.flash('success').toString(),
+		error:req.flash('error').toString()
+	});
+	console.log(req.session.user.header);
+});
+
+app.post('/updateheader/:username',checkLogin);
+app.post('/updateheader/:username',function(req,res){
+	var curname = req.session.user.name;
+	var username = req.params.username;
+	var errurl = encodeURI('/edit/'+username);
+	var url = encodeURI('/updateheader/'+username);
+	if(curname == username){
+		//這個是處理之後的圖片名字  唯一
+		var newheader = req.files.header.name;
+		console.log(req.files);
+		User.updateHeader(username,newheader,function(err){
+			if(err){
+				req.flash('error',err);
+				return res.redirect(errurl);
+			}
+			req.session.user.header = newheader;
+			req.flash('success','上傳成功');
+			res.redirect(url);
+		});
+	}else{
+		req.flash('error','抱歉你沒有權限');
+		res.redirect(errurl);
+	}
+});
+
+//更新密碼
+
+app.get('/updatepassword/:username',checkLogin);
+app.get('/updatepassword/:username',function(req,res){
+	res.render('updatepassword',{
+		title:'修改密碼',
+		user:req.session.user,
+		success:req.flash('success').toString(),
+		error:req.flash('error').toString()
+	});
+});
+
+app.post('/updatepassword/:username',checkLogin);
+app.post('/updatepassword/:username',function(req,res){
+	var username = req.params.username;
+	var curname = req.session.user.name;
+	var url = encodeURI('/edit/'+username);
+	var errurl = encodeURI('/updatepassword/'+username);
+	if(username == curname){
+		var md5 = crypto.createHash('md5');
+		var newpassword = req.body.newpassword;
+		var re_password = req.body['re-password'];
+		console.log(newpassword);
+		console.log(re_password);
+		if(newpassword !== re_password){
+			req.flash('error','兩次輸入的密碼不一致 :-)');
+			return res.redirect('errurl');
+		}
+
+		var oldpassword = md5.update(req.body.oldpassword).digest('hex');
+
+		//每次都要重新构建hash
+		newpassword = crypto.createHash('md5').update(newpassword).digest('hex');
+		User.updatepassword(username,oldpassword,newpassword,function(err,user){
+			if(err){
+				req.flash('error',err);
+				return res.redirect(errurl);
+			}
+			console.log(user);
+			req.flash('success','密码修改成功');
+			res.redirect(url);
+		});
+	}else{
+		req.flash('error','抱歉,你沒有權限修改密碼');
+		res.redirect(errurl);
+	}
+
+});
 
 
 	function checkLogin(req,res,next){

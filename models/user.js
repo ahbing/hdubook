@@ -6,7 +6,9 @@ function User(user){
 	this.name = user.name;  //用戶名
 	this.password = user.password;  //密碼
 	this.grade = user.grade;  //  年級
-	this.faculty = user.faculty // 學院/系別
+	this.faculty = user.faculty; // 學院/系別
+	this.header = user.header;  //頭像
+	this.motto = user.motto;   //座右銘
 }
 
 module.exports = User;
@@ -27,8 +29,9 @@ User.prototype.save = function(callback){
 		password : this.password,
 		grade : this.grade,
 		faculty : this.faculty,
-		time : time
-
+		time : time,
+		header : this.header,
+		motto : this.motto
 		//  用戶存儲擴展
 
 	};
@@ -77,7 +80,177 @@ User.get = function(name, callback){
 	});
 };
 
+// 根據用戶姓名作出響應的修改
+User.getUserByName = function(name,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.findOne({name : name},function(err,user){
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+				callback(null,user);
+			});
+		});
+	});
+};
 
+
+User.updateName = function(username,name,callback){
+
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+		//如果是編輯用戶名  則也要去更新books的集合里的用戶名
+			collection.findOne({name:name},function(err,user){
+				if(err){
+					mongodb.close();
+					return callback(err);
+				}
+				if(user){
+					mongodb.close();
+					return callback(null,user);
+				}
+
+				//如果修改的用戶名不存在
+				collection.update({name:username},{$set:{name:name}},function(err){
+					if(err){
+						mongodb.close();
+						return callback(err);
+					}
+					//  如果更名成功 ,將books 集合的 bookusername  也改過來
+					db.collection('books',function(err,collection){
+						if(err){
+							mongodb.close();
+							return callback(err);
+						}
+						collection.update({bookusername:username},{$set:{bookusername:name}},function(err){
+							mongodb.close();
+							if(err){
+								return callback(err);
+							}
+							 //  books 更新成功
+							callback(null);
+						});
+					});
+				});
+			});
+		});
+	});
+};
+
+User.update= function(username,faculty,grade,header,motto,callback){
+
+	var query = {};
+	if(faculty){
+		query.faculty = faculty;
+	}
+	if(grade){
+		query.grade = grade;
+	}
+	if(header){
+		query.header = header;
+	}
+	if(motto){
+		query.motto = motto;
+	}
+
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.update({name:username},{$set:query},function(err){
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+				callback(null);
+			});
+		});
+	});
+};
+
+User.updateHeader = function(username,header,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.update({name:username},{$set:{
+				header:header
+			}},function(err){
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+				callback(null);
+			});
+		});
+	});
+};
+
+User.updatepassword = function(username,oldpassword,newpassword,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			//找到这个人  且 密码正确
+			collection.findOne({name:username,password:oldpassword},function(err,user){
+				if(err){
+					mongodb.close();
+					return callback(err);
+				}
+				if(!user){
+					mongodb.close();
+					return callback('密码输入错误');
+				}
+				collection.update({
+					name:username
+				},{
+					$set:{password : newpassword}
+				},function(err){
+					mongodb.close();
+					if(err){
+						return callback(err);
+					}
+				});
+				callback(null,user);
+			});
+		});
+	});
+};
 
 
 

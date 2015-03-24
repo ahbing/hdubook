@@ -4,7 +4,7 @@
   <% if(book.sold == 0){ %>
   <div>
   書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
-  賣家:<a href="/user/<%= book.bookuser.name %>"><%= book.bookuser.name %></a><br/>
+  賣家:<a href="/user/<%= book.bookusername %>"><%= book.bookusername %></a><br/>
   價格:<%= book.bookprice %><br/><br/>
   賣家曾經使用的時間:<br/><%= book.usetime %><br/><br/>
   賣家對你的留言:<br/><%= book.usersay %>

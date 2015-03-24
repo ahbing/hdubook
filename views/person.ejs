@@ -2,6 +2,7 @@
   <%= title%>
 
  <a href="/sold/<%= userName%>">我賣掉的書</a>
+ <a href="/edit/<%= userName%>">個人信息修改</a>
   <% books.forEach(function(book,index){ %>
 <% if(book.sold == 0){ %>
   <div>

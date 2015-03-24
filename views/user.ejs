@@ -1,7 +1,7 @@
 <%- include header %>
   <%= userName%>的<%= title%>
   <% books.forEach(function(book,index){ %>
-  <% if(book.sold == 0){ %>
+<% if(book.sold == 0){ %>
   <div>
   書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
   價格:<%= book.bookprice %><br/><br/>
@@ -9,8 +9,9 @@
   <%= userName%>對你的留言:<br/><%= book.usersay %>
   </div>
   <br />
-  <% }); %>
 <% } %>
+  <% }); %>
+
     <div>
     <% if (!isFirstPage) { %>
       <span><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>

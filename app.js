@@ -10,6 +10,9 @@ var session = require('express-session');
 
 var routes = require('./routes/index');
 var settings = require('./settings');
+
+var multer = require('multer');
+
 var app = express();
 
 
@@ -25,6 +28,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//  上傳文件中間件
+app.use(multer({
+  //設置存放圖片目錄
+  dest: './public/upload/images',
+  //  修改文件名稱
+  rename: function (fieldname, filename) {
+    return filename.replace(/\W+/g, '-').toLowerCase() + Date.now();
+  }
+}));
 
 app.use(cookieParser());
 app.use(flash());
