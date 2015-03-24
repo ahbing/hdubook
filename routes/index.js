@@ -52,6 +52,7 @@ module.exports = function(app){
 				password = md5.update(req.body.password).digest('hex');
 		var newUser = new User({
 			name:req.body.name,
+			sex:req.body.sex,
 			password:password,  //加密過的密碼
 			grade:req.body.grade,
 			faculty:req.body.faculty,
@@ -136,12 +137,13 @@ module.exports = function(app){
 
 	app.post('/upload',checkLogin);
 	app.post('/upload',function(req,res){
-		var bookusername = req.session.user.name, // 用戶信息 與書本綁定包括作者名字、專業、年級
+		var bookuser = req.session.user,
+				bookusername = req.session.user.name,
 		    bookname = req.body.bookname,
 				bookprice = req.body.bookprice,
 				usetime = req.body.usetime,
 				usersay = req.body.usersay;
-		var newBook = new Book(bookusername,bookname,bookprice,usetime,usersay);
+		var newBook = new Book(bookuser,bookusername,bookname,bookprice,usetime,usersay);
 
 		newBook.save(function(err){
 			if(err){

@@ -1,5 +1,6 @@
 <%- include header %>
   <%= userName%>的<%= title%>
+  <img src="/upload/images/<%= user.header%>" alt="用户头像"/>
   <% books.forEach(function(book,index){ %>
 <% if(book.sold == 0){ %>
   <div>

@@ -4,6 +4,7 @@ var mongodb = require('./db');
 // user 十一個存放用戶信息的對象
 function User(user){
 	this.name = user.name;  //用戶名
+	this.sex = user.sex;   //性别
 	this.password = user.password;  //密碼
 	this.grade = user.grade;  //  年級
 	this.faculty = user.faculty; // 學院/系別
@@ -27,6 +28,7 @@ User.prototype.save = function(callback){
 	var user = {
 		name :this.name,
 		password : this.password,
+		sex : this.sex,
 		grade : this.grade,
 		faculty : this.faculty,
 		time : time,

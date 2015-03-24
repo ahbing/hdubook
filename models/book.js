@@ -1,8 +1,8 @@
 var mongodb = require('./db');
 //  mongodb 的id
 var ObjectID = require('mongodb').ObjectID;
-function Book(bookusername,bookname,bookprice,usetime,usersay){
-	// this.bookuser = bookuser;
+function Book(bookuser,bookusername,bookname,bookprice,usetime,usersay){
+	this.bookuser = bookuser;
 	this.bookusername = bookusername;  //用戶名字 單獨拿出來
 	this.bookname = bookname;
 	this.bookprice =  bookprice;
@@ -24,7 +24,7 @@ Book.prototype.save = function(callback){
       date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
 	};
 	var book = {
-		// bookuser : this.bookuser,
+		bookuser : this.bookuser,
 		bookusername :this.bookusername,
 		bookname : this.bookname,
 		bookprice : this.bookprice,
