@@ -1,24 +1,36 @@
-<%- include header %>
-  <%= title%>
-  <% books.forEach(function(book,index){ %>
-  <% if(book.sold == 0){ %>
-  <div>
-  書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
-  賣家:<a href="/user/<%= book.bookusername %>"><%= book.bookusername %></a><br/>
-  價格:<%= book.bookprice %><br/><br/>
-  賣家曾經使用的時間:<br/><%= book.usetime %><br/><br/>
-  賣家對你的留言:<br/><%= book.usersay %>
-  </div>
-  <br />
-<% } %>
-  <% }); %>
+<%- include header%>
+  <section class="main">
+    <img src="images/bg.jpg" alt="bg">
+    <div class="search">
+      <form action="/search" method="GET">
+          <input placeholder="请输入你想要找的书名" class="s-text" type="search" name="search">
+      </form>
+    </div>
+  </section>
+ <section class="body">
+    <% books.forEach(function(book,index){ %>
+    <% if(book.sold == 0 ){ %>
+      <div class="book">
+        <div class="book-img">
+          <a href="/book/<%= book._id%>">
+            <img src="images/book.jpg" alt="book">
+          </a>
+        </div>
+        <div class="bookname">
+          书名: <a href="/book/<%= book._id%>"><%= book.bookname%></a>
+        </div>
+        <div class="book-user">
+          卖家: <a href="/user/<%= book.bookusername%>"><%= book.bookusername%></a>
+        </div>
+        <div>
+          价格:<%= book.bookprice %>
+        </div>
+    </div>
+    <% } %>
+  <% });%>
 
-  <div>
-    <% if (!isFirstPage) { %>
-      <span class="prepage"><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
-    <% } %>
-    <% if (!isLastPage) { %>
-      <span class="nextpage"><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
-    <% } %>
-  </div>
-<%- include footer %>
+
+
+<%- include page %>
+</section>
+<%- include footer%>

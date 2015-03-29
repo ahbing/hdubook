@@ -1,8 +1,43 @@
-<%- include header %>
-  <%= title%><br/>
-  書本名字:<%= book.bookname %><br/>
-  賣家稱呼:<%= book.bookusername %><br/>
-  上傳時間:<%= book.time.day %><br/>
-  賣家學院系別:<%= book.bookuser.faculty%><br/>
-  賣家年級:<%= book.bookuser.grade%>
-<%- include footer %>
+<%- include header%>
+
+  <section class="p-info">
+      <img class="p-bg" src="/images/bg.jpg" alt="背景图片"/>
+      <img id="my-header" src="/upload/images/<%= book.userheader %>" alt="用户头像" class="p-header">
+
+      <span class="p-motto">
+        <span class="p-motto-bg"></span>
+        <p class="motto-text"><%= book.bookusername%> :
+        <%= book.usermotto %></p>
+      </span>
+  </section>
+
+  <section class="thebook">
+    <div class="book">
+      <span class="book-img">
+        <a title="<%= book.bookname %>" href="<%= book.bookname %>">
+          <img src="/images/book.jpg" alt="book">
+        </a>
+      </span>
+    </div>
+    <div class='book-info'>
+        <div class="book-user">
+          卖家: <%= book.bookusername %>
+        </div>
+        <div class="book-price">
+          价格:20$
+        </div>
+        <div class="upload-time">
+          上传时间<%= book.time.day %>
+        </div>
+        <div class="userfaculty">
+          卖家学院系别:<%= book.userfaculty%>
+        </div>
+        <div class="usersay">
+          卖家对你的留言:<br/>你好吗？在努力吗？有微笑吗？
+          你好吗？在努力吗？有微笑吗？
+          你好吗？在努力吗？有微笑吗？
+          你好吗？在努力吗？有微笑吗？
+        </div>
+    </div>
+  </section>
+<%- include footer%>

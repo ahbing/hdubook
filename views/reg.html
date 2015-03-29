@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+			</span>
+		</header>
+
+		<section class="reg">
+			<span class="reg-info">info</span>
+
+			<span class="reg-box">
+			  <form method="post">
+			    用户名称 : <input type="text" id="reg-name" name="name"/><br/>
+			    设置密码 : <input type="password" id="reg-psw"  name="password"/><br/>
+			    重复密码 : <input type="password" name="re-password"/><br/>
+			    你的性别 :
+					<select name="sex">
+						<option value="male">男生</option>
+						<option value="female">女生</option>
+					</select>
+					<br/>
+					<!-- ajax 数据处理 -->
+			    学院系别 : <input type="text" id="reg-fac"  name="faculty"/><br/>
+			    <!-- option 选项 -->
+			    大学年级 :
+			    <select name="grade">
+			    	<option value="大一">大一</option>
+			    	<option value="大二">大二</option>
+			    	<option value="大三">大三</option>
+			    	<option value="大四">大四</option>
+			    </select><br/>
+			    <input type="hidden" name="header" value="logo.jpg"><br/>
+			    <input type="hidden" name ="motto" value="">
+			    <input type="submit" class="btn" value="注册"/>
+		   </form>
+			</span>
+		</section>
+
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

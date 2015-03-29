@@ -1,28 +1,47 @@
-<%- include header %>
-   <form action="/edit/<%= username %>/<%= username %>" method="post">
-    當前用戶名稱 : <%= username%><br/>
-    新用戶名稱<input type="text" name="name"/><br/>
-    <input type="submit" value="保存">
-    </form>
+<%- include header%>
+    <section class="reg">
+      <span class="reg-info">info</span>
+      <span class="reg-box">
+        当前用户名 : <%= username%>
+        <!-- 点击编辑 显示修改表单 -->
+        <a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+        <form class="user-name" action="/edit/<%= username %>/<%= username %>" method="post">
+        新用户名<input type="text" name="name"/><br/>
+        <input class="btn" type="submit" value="保存">
+        </form>
 
- <form action="/edit/<%= username %>/<%= userfaculty %>" method="post">
-    當前學院系別:<%= userfaculty %><br/>
-    新學院系別:
-    <input type="text" name="faculty"/><br/>
- <input type="submit" value="保存">
-    </form>
 
- <form action="/edit/<%= username %>/<%= usergrade %>" method="post">
-    當前年級:<%= usergrade %><br/>
-    新年級:<input type="text" name="grade"/><br/>
- <input type="submit" value="保存">
-</form>
+        当前学院系别:<%= userfaculty %>
+        <a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+        <form class="user-faculty" action="/edit/<%= username %>/<%= userfaculty %>" method="post">
+            新学院系别:
+            <input type="text" name="faculty"/><br/>
+         <input class="btn" type="submit" value="保存">
+        </form>
 
- <form action="/edit/<%= username %>/<%= usermotto %>" method="post">
-    當前座右銘 :<%= usermotto %><br/>
-    新座右銘:<input type="input" name ="motto">
- <input type="submit" value="保存">
-    </form>
-    <a href="/updatepassword/<%= username%>">修改密碼</a>
-    <a href="/updateheader/<%= username%>">修改頭像</a>
-<%- include footer %>
+
+        当前年级:<%= usergrade %>
+        <a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+        <form class="user-grade" action="/edit/<%= username %>/<%= usergrade %>" method="post">
+            新年级:<select name="grade">
+            <option value="大一">大一</option>
+            <option value="大二">大二</option>
+            <option value="大三">大三</option>
+            <option value="大四">大四</option>
+          </select><br/>
+         <input class="btn" type="submit" value="保存">
+        </form>
+
+
+        当前motto :<%= usermotto %>
+        <a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+        <form class="user-motto" action="/edit/<%= username %>/<%= usermotto %>" method="post">
+        新motto:<input type="input" name ="motto">
+          <input class="btn" type="submit" value="保存">
+        </form>
+        <a href="/updatepassword/<%= username%>">修改密码</a>
+        <a href="/updateheader/<%= username%>">修改头像</a>
+      </span>
+    </section>
+
+<%- include footer%>

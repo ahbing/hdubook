@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+			</span>
+		</header>
+
+		<section class="upload">
+			<span class="up-info">info</span>
+
+			<span class="up-box">
+				 <form method="post">
+			    <span class="e-bookname">书的名称: <%= book.bookname%></span><br/><br/>
+			    书的价格:<input type="text" name="bookprice" value="<%= book.bookprice%>"/><br/>
+
+			    你是在什么年级使用了这本书:<br/>
+			    <input type="text" name="usetime" value="<%= book.usetime%>"><br/>
+
+			    你有什么话要对买这本书的人说:<br/>
+			    <textarea name="usersay"><%= book.usersay %></textarea><br/>
+
+			    <input type="hidden" name="bookusername" value="<%= book.bookusername%>">
+			    <input type="hidden" name="bookuser" value="<%= book.bookuser %>">
+
+			    <input type="hidden" name="bookid" value="<%= book._id%>">
+			    <input type="submit" value="更新信息"/>
+			  </form>
+			</span>
+
+		</section>
+
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

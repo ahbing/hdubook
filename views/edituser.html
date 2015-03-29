@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+			</span>
+		</header>
+
+		<section class="reg">
+			<span class="reg-info">info</span>
+			<span class="reg-box">
+				当前用户名 : <%= username%>
+				<!-- 点击编辑 显示修改表单 -->
+				<a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+			  <form class="user-name" action="/edit/<%= username %>/<%= username %>" method="post">
+		    新用户名<input type="text" name="name"/><br/>
+		    <input class="btn" type="submit" value="保存">
+		    </form>
+
+
+				当前学院系别:<%= userfaculty %>
+				<a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+				<form class="user-faculty" action="/edit/<%= username %>/<%= userfaculty %>" method="post">
+				    新学院系别:
+				    <input type="text" name="faculty"/><br/>
+				 <input class="btn" type="submit" value="保存">
+				</form>
+
+
+				当前年级:<%= usergrade %>
+				<a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+				<form class="user-grade" action="/edit/<%= username %>/<%= usergrade %>" method="post">
+				    新年级:<select name="grade">
+			    	<option value="大一">大一</option>
+			    	<option value="大二">大二</option>
+			    	<option value="大三">大三</option>
+			    	<option value="大四">大四</option>
+			    </select><br/>
+				 <input class="btn" type="submit" value="保存">
+				</form>
+
+
+				当前motto :<%= usermotto %>
+				<a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
+		 		<form class="user-motto" action="/edit/<%= username %>/<%= usermotto %>" method="post">
+		    新motto:<input type="input" name ="motto">
+		 			<input class="btn" type="submit" value="保存">
+		    </form>
+		    <a href="/updatepassword/<%= username%>">修改密码</a>
+		    <a href="/updateheader/<%= username%>">修改头像</a>
+			</span>
+		</section>
+
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

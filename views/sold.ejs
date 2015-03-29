@@ -1,25 +1,27 @@
-<%- include header %>
-  <%= title%>
+<%- include header%>
 
+<section class="body">
   <% books.forEach(function(book,index){ %>
-<% if(book.sold == 1){ %>
-  <div>
-  書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
-  價格:<%= book.bookprice %><br/><br/>
-  我曾經使用的時間:<br/><%= book.usetime %><br/><br/>
-  我對浏览者的留言:<br/><%= book.usersay %><br/>
-  </div>
-  <br />
-<% } %>
+    <% if(book.sold == 1){ %>
+      <div class="book">
+        <div class="book-img">
+          <a href="/book/<%= book._id%>">
+            <img src="/images/book.jpg" alt="book">
+          </a>
+        </div>
+        <div class="bookname">
+          书名: <a href="/book/<%= book._id%>"><%= book.bookname%></a>
+        </div>
+        <div class="book-price">
+          价格:<%= book.bookprice %>
+        </div>
+        <div class="sold-time">
+          2015-13-12
+        </div>
+    </div>
+    <% }%>
   <% }); %>
 
-
-    <div>
-    <% if (!isFirstPage) { %>
-      <span><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
-    <% } %>
-    <% if (!isLastPage) { %>
-      <span><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
-    <% } %>
-  </div>
-<%- include footer %>
+<%- include page %>
+</section>
+<%- include footer%>

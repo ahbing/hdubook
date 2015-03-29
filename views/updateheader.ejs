@@ -1,7 +1,17 @@
- <%  include header%>
- <form action="/updateheader/<%= user.name%>" method="post" enctype='multipart/form-data'>
-   當前頭像:<img src="/upload/images/<%= user.header%>" alt="當前頭像"><br/>
-    上傳新頭像:<input type="file" name="header"><br/>
- <input type="submit" value="保存">
-    </form>
- <%  include footer%>
+<%- include header%>
+
+<section class="upload">
+      <span class="up-info">info</span>
+
+      <span class="up-box">
+        <form action="/updateheader/<%= user.name%>" method="post" enctype='multipart/form-data'>
+          当前头像:<br/>
+            <img src="/upload/images/<%= user.header%> " class="update-header" alt="当前头像"><br/>
+          上传新头像:
+            <input type="file" name="header"><br/>
+            <input class="btn" type="submit" value="保存">
+        </form>
+      </span>
+    </section>
+
+<%- include footer%>

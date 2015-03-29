@@ -1,24 +1,37 @@
-<%- include header %>
-  <%= userName%>的<%= title%>
-  <img src="/upload/images/<%= user.header%>" alt="用户头像"/>
-  <% books.forEach(function(book,index){ %>
-<% if(book.sold == 0){ %>
-  <div>
-  書名:<a href="/book/<%= book._id %>"><%= book.bookname %></a><br/>
-  價格:<%= book.bookprice %><br/><br/>
-  <%= userName%>曾經使用的時間:<br/><%= book.usetime %><br/><br/>
-  <%= userName%>對你的留言:<br/><%= book.usersay %>
-  </div>
-  <br />
-<% } %>
-  <% }); %>
+<%- include header%>
 
-    <div>
-    <% if (!isFirstPage) { %>
-      <span><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
-    <% } %>
-    <% if (!isLastPage) { %>
-      <span><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
-    <% } %>
+  <section class="p-info">
+      <img class="p-bg" src="/upload/images/<%= userbg %>" alt="背景图片"/>
+      <img id="my-header" src="/upload/images/<%= userheader %>" alt="用户头像" class="p-header">
+      <span class="p-motto">
+        <span class="p-motto-bg"></span>
+        <p class="motto-text"><%= username %> : <%= usermotto %></p>
+      </span>
+  </section>
+
+ <section class="body">
+
+ <% books.forEach(function(book,index){%>
+  <% if(book.sold == 0){ %>
+    <div class="book">
+      <div class="book-img">
+        <a href="/book/<%= book._id%>">
+          <img src="/upload/images/books/book.jpg" alt="book">
+        </a>
+      </div>
+      <div class="bookname">
+        书名: <a href="/book/<%= book._id%>"><%= book.bookname%></a>
+      </div>
+      <div class="book-user">
+        卖家:<a href="/user/<%= book.bookusername%>"><%= book.bookusername%></a>
+      </div>
+      <div class="book-price">
+        价格:<%= book.bookprice %>
+      </div>
   </div>
-<%- include footer %>
+  <% } %>
+ <% }); %>
+
+<%- include page%>
+</section>
+<%- include footer%>

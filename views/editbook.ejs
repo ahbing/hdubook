@@ -1,17 +1,35 @@
-<%- include header %>
-  <form method="post">
-    書的名字:<input type="text" name="bookname" value="<%= book.bookname%>"/><br/>
+<%- include header%>
 
-    書的價格:<input type="text" name="bookprice" value="<%= book.bookprice%>"/><br/>
+<section class="upload">
+      <span class="up-info">info</span>
 
-    你是在什麼年級使用了這本書:<br/>
-    <input type="text" name="usetime" value="<%= book.usetime%>"><br/>
+      <span class="up-box">
 
-    你有什麼話要對想買這本書的人說:<br/>
-    <input type="text" name="usersay" value="<%= book.usersay %>"><br/>
-    <input type="hidden" name="bookusername" value="<%= book.bookusername%>">
-    <input type="hidden" name="bookuser" value="<%= book.bookuser %>">
-    <input type="hidden" name="bookid" value="<%= book._id%>">
-    <input type="submit" value="更新信息"/>
-  </form>
-<%- include footer %>
+         <form method="post">
+          <span class="e-bookname">书的名称: <%= book.bookname%></span><br/><br/>
+          书的价格:<input type="text" name="bookprice" value="<%= book.bookprice%>"/><br/>
+
+          你是在什么年级使用了这本书:<br/>
+          <select name="usetime">
+            <option value="<%= book.usetime%>""><%= book.usetime%></option>
+            <option value="大一">大一</option>
+            <option value="大二">大二</option>
+            <option value="大三">大三</option>
+            <option value="大四">大四</option>
+          </select><br/>
+
+          你有什么话要对买这本书的人说:<br/>
+          <textarea name="usersay"><%= book.usersay %></textarea><br/>
+
+          <input type="hidden" name="bookusername" value="<%= book.bookusername%>">
+          <input type="hidden" name="bookname" value="<%= book.bookname%>">
+
+          <input type="hidden" name="bookid" value="<%= book._id%>">
+          <input type="submit" value="更新信息"/>
+        </form>
+
+      </span>
+
+    </section>
+
+<%- include footer%>

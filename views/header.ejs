@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
   <% if(success){ %>
-		<div> <%= success %> </div>
-	<% }else{ %>
-		<div> <%= error %> </div>
-	<% } %>
-
-  <% if(user){ %>
-    <span><a href="/logout">登出</a></span>
-    <span><a href="/upload">上傳</a></span>
-    <!-- 如果是自己的name顯示個人中心可以編輯 -->
-    <span><a href="/user/<%= user.name %>">個人中心</a></span>
-
+    <div class="success"><%= success %></div>
   <% }else{ %>
-    <span><a href="/reg">註冊</a></span><br/>
-    <span><a href="/login">登錄</a></span>
+    <div class="error"><%= error %></div>
   <% } %>
-  <br/>
-    <span>
-      <form action="/search" method="GET">
-        <input type="search" name="search">
-      </form>
-    </span>
+  <div class="container">
+    <header class="header">
+      <span class="logo">
+        <a href="/">
+          <img src="/images/logo.jpg" alt="logo"/>
+        </a>
+      </span>
+      <span class="sign">
+        <% if(user){ %>
+
+          <span><a href="/upload">上傳</a></span>
+          <!-- 如果是自己的name顯示個人中心可以編輯 -->
+          <span><a href="/user/<%= user.name %>">個人中心</a></span>
+          <span><a href="/logout">登出</a></span>
+          <span><a href="/sold/<%= user.name%>">我賣掉的書</a></span>
+          <span><a href="/edit/<%= user.name%>">個人信息修改</a></span>
+        <% }else{ %>
+          <span><a href="/reg">注册</a></span>
+          <span><a href="/login">登录</a></span>
+        <% } %>
+
+      </span>
+    </header>

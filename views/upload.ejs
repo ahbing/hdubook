@@ -1,11 +1,30 @@
-<%- include header %>
-  <form method="post">
-    書的名字:<input type="text" name="bookname"/><br/>
-    書的價格:<input type="text" name="bookprice"/><br/>
-    你是在什麼年級使用了這本書:<br/>
-    <input type="text" name="usetime"><br/>
-    你有什麼話要對想買這本書的人說:<br/>
-    <input type="text" name="usersay"><br/>
-    <input type="submit" value="上傳信息"/>
-  </form>
-<%- include footer %>
+<%- include header%>
+
+    <section class="upload">
+      <span class="up-info">info</span>
+      <span class="up-box">
+        <!-- ajax 调用input数据 输入框只允许 选择键入 -->
+        <!-- 书名与后台数据库有相应的图片 -->
+        <form method="post">
+          书的名字：<br/><input id="up-bookname" type="text" name="bookname" placeholder="请输入上传的书名,系统会为其选择图片"><br/>
+
+          <!-- 正则过滤 -->
+          书的价格：<br/><input type="text" id="up-bookprice" name="bookprice"/><br/>
+
+          你是在什么年级使用了这本书：<br/>
+          <select id="up-usetime" name="usetime">
+            <option value="大一">大一</option>
+            <option value="大二">大二</option>
+            <option value="大三">大三</option>
+            <option value="大四">大四</option>
+          </select><br/>
+
+          <!-- 正则去掉 前后多余空格 -->
+          你有什么话要对买这本书的人说：<br/>
+          <textarea id="up-usersay" name="usersay" ></textarea><br/>
+          <input type="submit" id="up-btn" class="btn" value="上传信息">
+        </form>
+      </span>
+    </section>
+
+<%- include footer%>

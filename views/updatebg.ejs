@@ -1,0 +1,17 @@
+<%- include header%>
+
+<section class="upload">
+      <span class="up-info">info</span>
+
+      <span class="up-box">
+        <form action="/updatebg/<%= user.name%>" method="post" enctype='multipart/form-data'>
+          当前背景:<br/>
+            <img src="/upload/images/<%= user.bg%> " class="update-header" alt="当前头像"><br/>
+          上传新头像:
+            <input type="file" name="bg"><br/>
+            <input class="btn" type="submit" value="保存">
+        </form>
+      </span>
+    </section>
+
+<%- include footer%>
