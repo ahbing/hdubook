@@ -56,8 +56,8 @@ module.exports = function(app){
 			password:password,  //加密過的密碼
 			grade:req.body.grade,
 			faculty:req.body.faculty,
-			// 用戶名加上圖片名確保圖片src唯一
 			header :req.body.header,
+			bg : req.body.bg,
 			motto : req.body.motto
 		});
 		// 檢驗用戶名稱是否已經存在
@@ -139,11 +139,17 @@ module.exports = function(app){
 	app.post('/upload',function(req,res){
 		var bookuser = req.session.user,
 				bookusername = req.session.user.name,
+				bookusersex = req.session.user.sex,
+				bookusergrade = req.session.user.grade,
+				bookuserfaculty = req.session.user.faculty,
+				bookuserheader = req.session.user.header,
+				bookuserbg = req.session.user.bg,
+				bookusermotto = req.session.user.motto,
 		    bookname = req.body.bookname,
 				bookprice = req.body.bookprice,
 				usetime = req.body.usetime,
 				usersay = req.body.usersay;
-		var newBook = new Book(bookuser,bookusername,bookname,bookprice,usetime,usersay);
+		var newBook = new Book(bookusername,bookusersex,bookusergrade,bookuserfaculty,bookuserheader,bookuserbg,bookusermotto,bookname,bookprice,usetime,usersay);
 
 		newBook.save(function(err){
 			if(err){
@@ -157,16 +163,18 @@ module.exports = function(app){
 
   app.get('/user/:name',checkLogin);
   app.get('/user/:name',function(req,res){
-  	var userName = req.params.name;
-  	var curName = req.session.user.name;
-  	if(userName == curName){
+  	var username = req.params.name;
+  	var curname = req.session.user.name;
+  	if(username == curname){
   		//访问 个人主頁
   		var page = req.query.p ? parseInt(req.query.p) :1;
-  		Book.getBooksByBookName(curName,null,page,function(err,books,num,total){
+  		Book.getBooksByBookName(curname,null,page,function(err,books,num,total){
   			res.render('person',{
   				title:'个人中心',
-  				userName:userName,
-  				books:books,
+  				username:username,
+   				books:books,
+   				userbg :req.session.user.bg,
+   				userheader :req.session.user.header,
   				user:req.session.user,
   				page:page,
 					total:total,
@@ -178,11 +186,14 @@ module.exports = function(app){
   		});
   	}else{
   		var page = req.query.p ? parseInt(req.query.p) :1;
-  		Book.getBooksByBookName(userName,null,page,function(err,books,num,total){
+  		Book.getBooksByBookName(username,null,page,function(err,books,num,total){
   			res.render('user',{
   				title:'个人中心',
-  				userName:userName,
+  				username:username,
   				books:books,
+  				userbg:books[0].bookuserbg,
+  				userheader: books[0].bookuserheader,
+   				usermotto : books[0].bookusermotto,
   				user:req.session.user,
   				page:page,
 					total:total,
@@ -207,6 +218,16 @@ module.exports = function(app){
 			res.render('book',{
 				title:'書本詳情',
 				book:book,
+				bookuserbg : book.bookuserbg,
+				bookuserheader : book.bookuserheader,
+				bookusername : book.bookusername,
+				bookusermotto : book.bookusermotto,
+				bookuserfaculty : book.bookuserfaculty,
+				bookusergrade : book.bookusergrade,
+				usersay :book.usersay,
+				bookname : book.bookname,
+				bookprice :book.bookprice,
+				uploadtimeday :book.time.day,
 				user:req.session.user,
 				success : req.flash('success').toString(),
 				error : req.flash('error').toString()
@@ -260,7 +281,6 @@ module.exports = function(app){
 		var bookid = req.body.bookid;
 		var url = encodeURI('/user/'+req.body.bookusername);
 		var book = {
-			bookuser:req.body.bookuser,
 			bookusername : req.body.bookusername,
 			bookname:req.body.bookname,
 			bookprice:req.body.bookprice,
@@ -363,7 +383,7 @@ module.exports = function(app){
 				});
 			});
 		}else{
-			req.flash('error',你沒有權限訪問該業麵);
+			req.flash('error','你沒有權限訪問該業麵');
 			res.redirect('back');
 		}
 	});
@@ -374,7 +394,6 @@ module.exports = function(app){
 		var newname = req.body.name;
 		var newfaculty = req.body.faculty;
 		var newgrade = req.body.grade;
-		var newheader = req.body.header;
 		var newmotto = req.body.motto;
 		var errurl = encodeURI('/edit/'+username);
 		var url = encodeURI('/edit/'+newname);
@@ -398,11 +417,15 @@ module.exports = function(app){
 			});
 		}else{
 		  var url = encodeURI('/edit/'+username);
-			User.update(username,newfaculty,newgrade,newheader,newmotto,function(err){
+			User.update(username,newfaculty,newgrade,newmotto,function(err){
 				if(err){
 					req.flash('error',err);
 					return res.redirect(url);
 				}
+				// 更新
+				req.session.user.faculty = newfaculty;
+				req.session.user.grade = newgrade;
+				req.session.user.motto = newmotto;
 				req.flash('success','修改成功');
 				res.redirect(url);
 			});
@@ -447,6 +470,45 @@ app.post('/updateheader/:username',function(req,res){
 	}
 });
 
+
+//上传更新背景
+app.get('/updatebg/:username',checkLogin);
+app.get('/updatebg/:username',function(req,res){
+	res.render('updatebg',{
+		title:'修改背景',
+		user:req.session.user,
+		success:req.flash('success').toString(),
+		error:req.flash('error').toString()
+	});
+	console.log(req.session.user.bg);
+});
+
+app.post('/updatebg/:username',checkLogin);
+app.post('/updatebg/:username',function(req,res){
+	var curname = req.session.user.name;
+	var username = req.params.username;
+	var errurl = encodeURI('/user/'+username);
+	var url = encodeURI('/updatebg/'+username);
+	if(curname == username){
+		//這個是處理之後的圖片名字  唯一
+		var newbg = req.files.bg.name;
+		console.log(req.files);
+		User.updateBg(username,newbg,function(err){
+			if(err){
+				req.flash('error',err);
+				return res.redirect(errurl);
+			}
+			req.session.user.bg = newbg;
+			req.flash('success','上傳成功');
+			res.redirect(url);
+		});
+	}else{
+		req.flash('error','抱歉你沒有權限');
+		res.redirect(errurl);
+	}
+});
+
+
 //更新密碼
 
 app.get('/updatepassword/:username',checkLogin);
@@ -469,8 +531,6 @@ app.post('/updatepassword/:username',function(req,res){
 		var md5 = crypto.createHash('md5');
 		var newpassword = req.body.newpassword;
 		var re_password = req.body['re-password'];
-		console.log(newpassword);
-		console.log(re_password);
 		if(newpassword !== re_password){
 			req.flash('error','兩次輸入的密碼不一致 :-)');
 			return res.redirect('errurl');
@@ -486,6 +546,8 @@ app.post('/updatepassword/:username',function(req,res){
 				return res.redirect(errurl);
 			}
 			console.log(user);
+			// 更新密码
+			req.session.user.password = newpassword;
 			req.flash('success','密码修改成功');
 			res.redirect(url);
 		});

@@ -9,6 +9,7 @@ function User(user){
 	this.grade = user.grade;  //  年級
 	this.faculty = user.faculty; // 學院/系別
 	this.header = user.header;  //頭像
+	this.bg = user.bg;
 	this.motto = user.motto;   //座右銘
 }
 
@@ -33,6 +34,7 @@ User.prototype.save = function(callback){
 		faculty : this.faculty,
 		time : time,
 		header : this.header,
+		bg : this.bg,
 		motto : this.motto
 		//  用戶存儲擴展
 
@@ -156,20 +158,24 @@ User.updateName = function(username,name,callback){
 	});
 };
 
-User.update= function(username,faculty,grade,header,motto,callback){
+User.update= function(username,faculty,grade,motto,callback){
 
 	var query = {};
+	var userquery = {};
+
 	if(faculty){
 		query.faculty = faculty;
+		userquery.bookuserfaculty = faculty;
 	}
 	if(grade){
 		query.grade = grade;
-	}
-	if(header){
-		query.header = header;
+		userquery.bookuserfaculty = faculty;
+
 	}
 	if(motto){
 		query.motto = motto;
+		userquery.bookusermotto = motto;
+
 	}
 
 	mongodb.open(function(err,db){
@@ -183,11 +189,24 @@ User.update= function(username,faculty,grade,header,motto,callback){
 				return callback(err);
 			}
 			collection.update({name:username},{$set:query},function(err){
-				mongodb.close();
+
 				if(err){
+					mongodb.close();
 					return callback(err);
 				}
-				callback(null);
+				db.collection('books',function(err,collection){
+					if(err){
+						mongodb.close();
+						return callback(err);
+					}
+					collection.update({bookusername:username},{$set:userquery},function(err){
+						mongodb.close();
+						if(err){
+							return callback(err);
+						}
+						callback(null);
+					});
+				});
 			});
 		});
 	});
@@ -207,15 +226,65 @@ User.updateHeader = function(username,header,callback){
 			collection.update({name:username},{$set:{
 				header:header
 			}},function(err){
-				mongodb.close();
 				if(err){
+					mongodb.close();
 					return callback(err);
 				}
-				callback(null);
+				db.collection('books',function(err,collection){
+					if(err){
+						mongodb.close();
+						return callback(err);
+					}
+					collection.update({bookusername:username},{$set:{bookuserheader:header}},function(err){
+						mongodb.close();
+						if(err){
+							return callback(err);
+						}
+						callback(null);
+					});
+				});
 			});
 		});
 	});
 };
+
+// 更新背景
+User.updateBg = function(username,bg,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('users',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.update({name:username},{$set:{
+				bg:bg
+			}},function(err){
+				if(err){
+					mongodb.close();
+					return callback(err);
+				}
+				db.collection('books',function(err,collection){
+					if(err){
+						mongodb.close();
+						return callback(err);
+					}
+					collection.update({bookusername:username},{$set:{bookuserbg:bg}},function(err){
+						mongodb.close();
+						if(err){
+							return callback(err);
+						}
+						callback(null);
+					});
+				});
+			});
+		});
+	});
+};
+
 
 User.updatepassword = function(username,oldpassword,newpassword,callback){
 	mongodb.open(function(err,db){

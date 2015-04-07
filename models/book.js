@@ -1,13 +1,18 @@
 var mongodb = require('./db');
 //  mongodb 的id
 var ObjectID = require('mongodb').ObjectID;
-function Book(bookuser,bookusername,bookname,bookprice,usetime,usersay){
-	this.bookuser = bookuser;
-	this.bookusername = bookusername;  //用戶名字 單獨拿出來
-	this.bookname = bookname;
-	this.bookprice =  bookprice;
-	this.usetime = usetime;
-	this.usersay = usersay;
+function Book(bookusername,bookusersex,bookusergrade,bookuserfaculty,bookuserheader,bookuserbg,bookusermotto,bookname,bookprice,usetime,usersay){
+	this.bookusername = bookusername;  //用户名称
+	this.bookusersex = bookusersex;   // 用户性别
+	this.bookusergrade = bookusergrade;  // 用户年级
+	this.bookuserfaculty = bookuserfaculty;  // 用户系别
+	this.bookuserheader = bookuserheader;  // 用户头像
+	this.bookuserbg = bookuserbg;  //  用户背景
+	this.bookusermotto = bookusermotto;  // 用户格言
+	this.bookname = bookname; // 书名
+	this.bookprice =  bookprice; // 书价
+	this.usetime = usetime;  // 用户使用时间
+	this.usersay = usersay;  // 用户留言
 }
 
 module.exports = Book;
@@ -24,8 +29,13 @@ Book.prototype.save = function(callback){
       date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
 	};
 	var book = {
-		bookuser : this.bookuser,
 		bookusername :this.bookusername,
+		bookusersex : this.bookusersex,
+		bookusergrade :this.bookusergrade,
+		bookuserfaculty :this.bookuserfaculty,
+		bookuserheader :this.bookuserheader,
+		bookuserbg :this.bookuserbg,
+		bookusermotto :this.bookusermotto,
 		bookname : this.bookname,
 		bookprice : this.bookprice,
 		usetime : this.usetime,
@@ -154,7 +164,6 @@ Book.update = function(bookId,book,callback){
 				return callback(err);
 			}
 			collection.update({_id:new ObjectID(bookId)},{$set:{
-				bookuser:book.bookuser,
 				bookusername:book.bookusername,
 				bookname:book.bookname,
 				bookprice:book.bookprice,
