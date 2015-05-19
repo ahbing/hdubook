@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+				<span><a href="/sold/<%= userName%>">我賣掉的書</a></span>
+ 				<span><a href="/edit/<%= userName%>">個人信息修改</a></span>
+ 				<span><a href="/logout">登出</a></span>
+    		<span><a href="/upload">上傳</a></span>
+    		<!-- 如果是自己的name顯示個人中心可以編輯 -->
+    		<span><a href="/user/<%= user.name %>">個人中心</a></span>
+			</span>
+		</header>
+		<section class="p-info">
+				<img class="p-bg" src="images/bg.jpg" alt="背景图片"/>
+				<span class="p-edit-bg">
+					<a href="#">编辑背景</a>
+				</span>
+
+				<img id="my-header" src="images/header.jpg" alt="用户头像" class="p-header">
+
+				<span class="p-motto">
+					<span class="p-motto-bg"></span>
+					<p class="motto-text">念树 : 你好吗？在努力吗？ 有微笑吗？</p>
+				</span>
+		</section>
+	 <section class="body">
+
+			<div class="book">
+				<div class="book-img">
+					<a href="#">
+						<img src="images/book.jpg" alt="book">
+					</a>
+				</div>
+				<div class="book-user">
+					卖家: <a href="#">thames</a>
+				</div>
+				<div class="book-price">
+					价格:20$
+				</div>
+				<div class="book-edit">
+					<a href="#">編輯</a>
+  				<a href="#">不賣啦</a>
+  				<a href="#">賣掉啦</a>
+				</div>
+			</div>
+
+			<div class="page">
+					<span class="prve">
+						<a href="#">上一页</a>
+					</span>
+					<span class="next">
+						<a href="">下一页</a>
+					</span>
+			</div>
+		</section>
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

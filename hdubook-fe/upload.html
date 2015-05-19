@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+			</span>
+		</header>
+
+		<section class="upload">
+			<span class="up-info">info</span>
+
+			<span class="up-box">
+				<!-- ajax 调用input数据 输入框只允许 选择键入 -->
+				<!-- 书名与后台数据库有相应的图片 -->
+				<form method="post">
+					书的名字：<br/><input id="up-bookname" type="text" name="bookname" placeholder="请输入上传的书名,系统会为其选择图片">
+					<ul class="booknames">
+						<li class="bookname active">111</li>
+						<li class="bookname">111</li>
+						<li class="bookname">111</li>
+					</ul>
+					<br/>
+					<!-- 正则过滤 -->
+					书的价格：<br/><input type="text" id="up-bookprice" name="bookprice"/><br/>
+					<!-- 同理  这里也必须控制键入内容 如大一上  大一下... -->
+					你是在什么年级使用了这本书：<br/><input type="text" id="up-usetime" name="usetime"><br/>
+					<!-- 正则去掉 前后多余空格 -->
+					你有什么话要对买这本书的人说：<br/>
+					<textarea id="up-usersay" name="usersay" ></textarea><br/>
+
+					<input type="submit" id="up-btn" class="btn" value="上传信息">
+				</form>
+			</span>
+
+		</section>
+
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

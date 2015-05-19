@@ -49,17 +49,37 @@ Book.prototype.save = function(callback){
 			mongodb.close();
 			return callback(err);
 		}
-		db.collection('books',function(err,collection){
+
+		//先去后台数据库查找bookimg
+
+		db.collection('adminbook',function(err,collection){
 			if(err){
 				mongodb.close();
 				return callback(err);
 			}
-			collection.insert(book,{safe:true},function(err){
-				mongodb.close();
+			collection.findOne({bookname:book.bookname},function(err,thebook){
 				if(err){
+					mongodb.close();
 					return callback(err);
 				}
-				callback(null);
+				if(thebook){
+					book.bookimg = thebook.bookimg;
+				}else{
+					book.bookimg = 'html51427528131776.png';
+				}
+				db.collection('books',function(err,collection){
+					if(err){
+						mongodb.close();
+						return callback(err);
+					}
+					collection.insert(book,{safe:true},function(err){
+						mongodb.close();
+						if(err){
+							return callback(err);
+						}
+						callback(null);
+					});
+				});
 			});
 		});
 	});
@@ -83,7 +103,8 @@ Book.getBooksByBookName = function(username,bookname,page,callback){
 			var query = {};
 
 			if(bookname && !username){
-				query.bookname = bookname;
+				// query.bookname = bookname;
+				query.bookname = {$regex: bookname };
 			}
 			if(username && !bookname){
 
@@ -235,6 +256,29 @@ Book.sold = function(bookid,callback){
 				}
 				callback(null);
 			});
+		});
+	});
+};
+
+// 后台数据库模糊查找书名  ajax  上传
+Book.getBookName = function(bookname,callback){
+	mongodb.open(function(err,db){
+		if(err){
+			mongodb.close();
+			return callback(err);
+		}
+		db.collection('adminbook',function(err,collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.find({bookname:{$regex:bookname}}).toArray(function(err,booknames){
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+				callback(null,booknames);
+			});;
 		});
 	});
 };

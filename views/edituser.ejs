@@ -6,8 +6,8 @@
         <!-- 点击编辑 显示修改表单 -->
         <a id="edit-name" class="edit-a" href="javascript:;">编辑</a><br/><br/>
         <form class="user-name" action="/edit/<%= username %>/<%= username %>" method="post">
-        新用户名<input type="text" name="name"/><br/>
-        <input class="btn" type="submit" value="保存">
+        新用户名<input type="text" id="edit-inut-name" name="name"/><br/>
+        <input class="btn save-edit-btn" id="edit-name-btn" type="submit" value="保存">
         </form>
 
 

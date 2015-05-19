@@ -1,0 +1,18 @@
+<%- include header%>
+    <section class="upload">
+      <span class="up-box">
+        <form method="post" enctype='multipart/form-data'>
+          <div id="book-box">
+            <div class="up-book">
+              书的名字：<br/><input type="text" name="bookname" ><br/>
+              书的封面：<br/><input type="file" name="bookimg">
+              <hr>
+            </div>
+          </div>
+          <br/>
+          <input type="submit" class="btn" value="上传">
+        </form>
+      </span>
+    </section>
+
+<%- include footer%>

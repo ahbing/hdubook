@@ -84,6 +84,33 @@ User.get = function(name, callback){
 	});
 };
 
+// 登录后台的用户名
+User.getAdminName= function(name,callback){
+	if(name === 'admin'){
+		mongodb.open(function(err,db){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+			db.collection('users',function(err,collection){
+				if(err){
+					mongodb.close();
+					return callback(err);
+				}
+				collection.findOne({name:name},function(err,user){
+					mongodb.close();
+					if(err){
+						return callback(err);
+					}
+					callback(null,user);
+				});
+			});
+		});
+	}else{
+		callback('你没有权利访问该页面');
+	}
+};
+
 // 根據用戶姓名作出響應的修改
 User.getUserByName = function(name,callback){
 	mongodb.open(function(err,db){
@@ -109,7 +136,6 @@ User.getUserByName = function(name,callback){
 
 
 User.updateName = function(username,name,callback){
-
 	mongodb.open(function(err,db){
 		if(err){
 			mongodb.close();

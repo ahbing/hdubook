@@ -5,6 +5,7 @@ var crypto = require('crypto'),
 //用戶model
 var User = require('../models/user.js');
 var Book = require('../models/book.js');
+var AdminBook = require('../models/adminbook.js')
 module.exports = function(app){
 
 	//主頁 顯示 最新上傳的書籍  和一個 input 搜索
@@ -150,7 +151,6 @@ module.exports = function(app){
 				usetime = req.body.usetime,
 				usersay = req.body.usersay;
 		var newBook = new Book(bookusername,bookusersex,bookusergrade,bookuserfaculty,bookuserheader,bookuserbg,bookusermotto,bookname,bookprice,usetime,usersay);
-
 		newBook.save(function(err){
 			if(err){
 				req.flash('error',err);
@@ -160,6 +160,25 @@ module.exports = function(app){
 			res.redirect('/');  //暫時先連到主頁上去
 		});
 	});
+
+	//   ajax
+	app.get('/ajax',checkLogin);
+	app.get('/ajax',function(req,res){
+		var bookname = req.query.bookname;
+		Book.getBookName(bookname,function(err,booknames){
+			if(err){
+				req.flash('error',err);
+				return res.redirect('/upload');
+			}
+			var strbookname = '';
+			for(var i = 0; i < booknames.length;i++){
+				console.log(booknames[i].bookname);
+				strbookname+=booknames[i].bookname+',';
+			}
+			res.send(strbookname);
+		});
+	});
+
 
   app.get('/user/:name',checkLogin);
   app.get('/user/:name',function(req,res){
@@ -412,7 +431,7 @@ module.exports = function(app){
 				}
 				req.flash('success','修改成功');
 				//修改當前登錄的人姓名
-				req.session.user.name = newname
+				req.session.user.name = newname;
 				res.redirect(url);
 			});
 		}else{
@@ -469,7 +488,6 @@ app.post('/updateheader/:username',function(req,res){
 		res.redirect(errurl);
 	}
 });
-
 
 //上传更新背景
 app.get('/updatebg/:username',checkLogin);
@@ -558,6 +576,67 @@ app.post('/updatepassword/:username',function(req,res){
 
 });
 
+// 后台管理界面
+app.get('/admin',checkNotLogin);
+app.get('/admin',function(req,res){
+	res.render('admin',{
+		title:'后台管理界面',
+		user:req.session.user,
+		success: req.flash('success').toString(),
+		error : req.flash('error').toString()
+	});
+});
+
+app.post('/admin',checkNotLogin);
+app.post('/admin',function(req,res){
+	var md5 = crypto.createHash('md5');
+	var name = req.body.name;
+	var password = md5.update(req.body.password).digest('hex');
+	User.getAdminName(name,function(err,user){
+		if(err){
+			req.flash('error',err);
+			return;
+		}
+		if(user){
+			if(password !== user.password){
+				req.flash('error','我們檢測到你應該書錯了密碼 :-)');
+				return res.redirect('/admin');
+			}
+			req.session.user = user;
+			req.flash('success','登錄成功,歡迎你 :-)');
+			res.redirect('/adminupload');
+		}
+	});
+});
+
+app.get('/adminupload',checkLogin);
+app.get('/adminupload',function(req,res){
+	res.render('adminupload',{
+		title:'后台上传',
+		user:req.session.user,
+		success:req.flash('success').toString(),
+		error:req.flash('error').toString()
+	});
+});
+
+app.post('/adminupload',checkLogin);
+app.post('/adminupload',function(req,res){
+	var bookname = req.body.bookname;
+	console.log(req.body);
+	console.log(bookname);
+	console.log(req.files);
+	var bookimg = req.files.bookimg.name;
+	var newbook = new AdminBook(bookname,bookimg);
+
+	newbook.save(function(err){
+		if(err){
+			req.flash('error',err);
+		}
+		req.flash('success','上传成功');
+		res.redirect('/adminupload');
+	});
+
+});
 
 	function checkLogin(req,res,next){
 		if(!req.session.user){
@@ -576,3 +655,24 @@ app.post('/updatepassword/:username',function(req,res){
 		next();
 	};
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

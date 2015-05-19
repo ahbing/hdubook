@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<title>杭电书城</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<header class="header">
+			<span class="logo">
+				<img src="images/logo.jpg" alt="logo"/>
+			</span>
+			<span class="sign">
+				<a href="/reg">注册</a>
+				<a href="/login">登录</a>
+			</span>
+		</header>
+
+		<section class="upload">
+			<span class="up-info">info</span>
+
+			<span class="up-box">
+
+				<form action="/updateheader/<%= user.name%>" method="post" enctype='multipart/form-data'>
+					当前头像:<br/>
+						<img src="images/header.jpg " class="update-header" alt="当前头像"><br/>
+    			上传新头像:
+    				<input type="file" name="header"><br/>
+ 						<input class="btn" type="submit" value="保存">
+				</form>
+			</span>
+		</section>
+
+
+		<footer class="footer">
+			<span class="copyinfo">
+				版权所有:杭州电子科技大学  betahouse工作室
+			</span>
+		</footer>
+	</div>
+</body>
+</html>

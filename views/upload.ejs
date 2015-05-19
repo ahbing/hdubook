@@ -1,18 +1,26 @@
 <%- include header%>
-
     <section class="upload">
       <span class="up-info">info</span>
       <span class="up-box">
         <!-- ajax 调用input数据 输入框只允许 选择键入 -->
         <!-- 书名与后台数据库有相应的图片 -->
-        <form method="post">
-          书的名字：<br/><input id="up-bookname" type="text" name="bookname" placeholder="请输入上传的书名,系统会为其选择图片"><br/>
-
+        <form method="post" id="upBookForm">
+          书的名字：<br/><input id="up-bookname" type="text" name="bookname" required placeholder="
+          请输入上传的书名,系统会为其选择图片"  >
+          <div id="bookname-box">
+           <!--  <ul class="booknames">
+              <li class="bookname active">111</li>
+              <li class="bookname">111</li>
+              <li class="bookname">111</li>
+            </ul> -->
+          </div>
+          <br/>
+          <br/>
           <!-- 正则过滤 -->
-          书的价格：<br/><input type="text" id="up-bookprice" name="bookprice"/><br/>
+          书的价格：<br/><input type="text" id="up-bookprice" name="bookprice"  required/><br/>
 
           你是在什么年级使用了这本书：<br/>
-          <select id="up-usetime" name="usetime">
+          <select id="up-usetime" name="usetime" >
             <option value="大一">大一</option>
             <option value="大二">大二</option>
             <option value="大三">大三</option>
@@ -21,7 +29,7 @@
 
           <!-- 正则去掉 前后多余空格 -->
           你有什么话要对买这本书的人说：<br/>
-          <textarea id="up-usersay" name="usersay" ></textarea><br/>
+          <textarea id="up-usersay" name="usersay" required ></textarea><br/>
           <input type="submit" id="up-btn" class="btn" value="上传信息">
         </form>
       </span>
